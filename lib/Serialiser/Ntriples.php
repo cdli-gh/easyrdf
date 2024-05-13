@@ -56,6 +56,10 @@ class Ntriples extends Serialiser
      */
     protected function escapeString($str)
     {
+        if (preg_match('/^[\x20-\x21\x23-\x5B\x5D-\x7E]*$/', $str)) {
+            return $str;
+        }
+
         $result = '';
         $strLen = mb_strlen($str, "UTF-8");
 
