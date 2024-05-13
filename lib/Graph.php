@@ -54,6 +54,7 @@ class Graph
 
     private $index = array();
     private $revIndex = array();
+    private $tripleIndex = array();
 
     /** Counter for the number of bnodes */
     private $bNodeCount = 0;
@@ -972,13 +973,16 @@ class Graph
         }
 
         // Check that the value doesn't already exist
-        if (isset($this->index[$resource][$property])) {
-            foreach ($this->index[$resource][$property] as $v) {
+        if (isset($this->tripleIndex[$resource][$property][$value['value']])) {
+            foreach ($this->tripleIndex[$resource][$property][$value['value']] as $v) {
                 if ($v == $value) {
                     return 0;
                 }
             }
         }
+        $this->tripleIndex[$resource][$property][$value['value']][] = $value;
+
+        // Add to the index
         $this->index[$resource][$property][] = $value;
 
         // Add to the reverse index if it is a resource
