@@ -56,24 +56,13 @@ class Ntriples extends Serialiser
      */
     protected function escapeString($str)
     {
-        if (preg_match('/^[\x20-\x21\x23-\x5B\x5D-\x7E]*$/', $str)) {
-            return $str;
-        }
-
-        $result = '';
-        $strLen = mb_strlen($str, "UTF-8");
-
-        for ($i = 0; $i < $strLen; $i++) {
-            $c = mb_substr($str, $i, 1, "UTF-8");
-
-            if (!isset($this->escChars[$c])) {
-                $this->escChars[$c] = $this->escapedChar($c);
+        return mb_ereg_replace_callback('[^\x20-\x21\x23-\x5B\x5D-\x7E]', function ($c) {
+            if (!isset($this->escChars[$c[0]])) {
+                $this->escChars[$c[0]] = $this->escapedChar($c[0]);
             }
 
-            $result .= $this->escChars[$c];
-        }
-
-        return $result;
+            return $this->escChars[$c[0]];
+        }, $str);
     }
 
     /**
