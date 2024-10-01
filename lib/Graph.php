@@ -56,6 +56,9 @@ class Graph
     private $revIndex = array();
     private $tripleIndex = array();
 
+    /** Prefix for bnode identifiers */
+    private $bNodePrefix = 'genid';
+
     /** Counter for the number of bnodes */
     private $bNodeCount = 0;
 
@@ -212,7 +215,17 @@ class Graph
      */
     public function newBNodeId()
     {
-        return "_:genid".(++$this->bNodeCount);
+        return "_:".$this->bNodePrefix.(++$this->bNodeCount);
+    }
+
+    /**
+     * Set prefix for blank node identifiers.
+     *
+     * @param string $prefix
+     */
+    public function setBNodePrefix($prefix)
+    {
+        $this->bNodePrefix = $prefix;
     }
 
     /**
